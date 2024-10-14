@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FiHome, FiShoppingCart, FiUser, FiList, FiSearch } from 'react-icons/fi';
-import { FaTimes } from 'react-icons/fa';
+import { FaHeart, FaTimes } from 'react-icons/fa';
 import logo from '../../assets/images/prohome.png';
 import { UserContext } from '../../context/UserContext';
 import { logoutUser } from '../../utils/userApis';
@@ -68,8 +68,8 @@ function Nav() {
                         <Link to="/properties" className={`${linkClasses("/properties")} text-sm font-medium flex items-center`}>
                             <FiList className="mr-2" /> Properties
                         </Link>
-                        <Link to="/cart" className={`${linkClasses("/cart")} text-sm font-medium flex items-center`}>
-                            <FiShoppingCart className="mr-2" /> Cart
+                        <Link to="/wishlist" className={`${linkClasses("/cart")} text-sm font-medium flex items-center`}>
+                        <FaHeart className="inline mr-2 text-red-100" /> WishList
                         </Link>
                         <div className="relative">
                             {isLoggedIn ? (
@@ -142,8 +142,8 @@ function Nav() {
                         <Link to="/properties" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
                             <FiList className="inline mr-2" /> Properties
                         </Link>
-                        <Link to="/cart" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
-                            <FiShoppingCart className="inline mr-2" /> Cart
+                        <Link to="/wishlist" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
+                            <FaHeart className="inline mr-2 text-red-100" /> WishList
                         </Link>
                         <Link to="/account" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
                             <FiUser className="inline mr-2" /> Account
