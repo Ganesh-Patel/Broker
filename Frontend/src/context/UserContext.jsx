@@ -19,6 +19,7 @@ export const UserProvider = ({ children }) => {
     checkLoginStatus();
 
   }, []);
+  
   console.log(isLoggedIn)
   if (loading) {
     return null;

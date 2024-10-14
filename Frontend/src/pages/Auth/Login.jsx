@@ -8,7 +8,7 @@ function Login() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
-  const { setUser } = useContext(UserContext);
+  const { setUser,isLoggedIn ,setIsLoggedIn} = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -22,6 +22,7 @@ function Login() {
       if (response.status === 200) {
         const user = response.data;
         setUser(user);
+        setIsLoggedIn(true);
         setMessage({ text: response.message, type: 'success' });
         navigate('/home');
       } else {
