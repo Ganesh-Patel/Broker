@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate, Link } from 'react-router-dom';
+import { registerUser } from '../../utils/userApis';
 
 function Signup() {
   const [firstname, setFirstname] = useState('');
@@ -30,16 +31,22 @@ function Signup() {
     e.preventDefault();
     setLoading(true);
 
-    const formData = {
-      firstname,
-      lastname,
-      email,
-      password,
-      role,
-      profilePic: profilefordb,
-    };
+    const formData = new FormData();
+    formData.append('firstname', firstname);
+    formData.append('lastname', lastname);
+    formData.append('email', email);
+    formData.append('password', password);
+    formData.append('role', role);
+    formData.append('profilePic', profilefordb);
 
-    console.log('Form Data:', formData); // Logging form data for now
+    console.log('Form Data:', formData); 
+    try {
+      const response=await registerUser(formData);
+      console.log(response);
+    } catch (error) {
+      console.log(error)
+      
+    }
     toast.success('Sign up successful!');
 
     setLoading(false);

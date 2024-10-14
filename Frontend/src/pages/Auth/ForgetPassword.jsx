@@ -14,26 +14,26 @@ function ForgetPassword() {
     const navigate = useNavigate();
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-cover bg-center" style={{ backgroundImage: 'url(/path/to/your-background-image.jpg)' }}>
-            <div className="w-full max-w-md p-8 bg-white bg-opacity-80 shadow-md rounded-lg">
+        <div className="flex items-center justify-center min-h-screen bg-cover bg-center" style={{ backgroundImage: 'url(https://png.pngtree.com/thumb_back/fh260/background/20190826/pngtree-abstract-metallic-blue-black-frame-layout-modern-tech-design-template-image_305020.jpg)' }}>
+            <div className="w-full max-w-md p-8 bg-transparent bg-opacity-80  backdrop-filter backdrop-blur-lg shadow-lg rounded-lg">
                 <h2 className="text-2xl font-bold mb-6 text-center text-teal-600">Forgot Password</h2>
 
                 {!accountFound && (
                     <div className="space-y-4">
                         <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+                            <label htmlFor="email" className="block text-sm font-medium text-teal-200">Email</label>
                             <input
                                 type="email"
                                 id="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
+                                className="text-white placeholder-gray-400 mt-1 block w-full px-4 py-2 border bg-transparent border-gray-400 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
                                 placeholder="Enter your email"
                             />
                         </div>
                         <button
-                            onClick={handleFetchAccount}
+                          
                             className="w-full bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                         >
                             Fetch Account
@@ -119,7 +119,6 @@ function ForgetPassword() {
                             />
                         </div>
                         <button
-                            onClick={handleResetPassword}
                             className="w-full bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                         >
                             Save New Password
@@ -128,7 +127,7 @@ function ForgetPassword() {
                     </div>
                 )}
                 
-                <footer className="mt-6 text-center text-gray-600">
+                <footer className="mt-6 text-center text-gray-200">
                     <p>&copy; {new Date().getFullYear()} ProHomes. All rights reserved.</p>
                 </footer>
             </div>

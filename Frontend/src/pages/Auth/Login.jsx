@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { UserContext } from '../../context/UserContext.jsx';
+import { loginUser } from '../../utils/userApis.js';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -14,10 +17,11 @@ function Login() {
     setMessage('');
     try {
       // Replace with your authentication logic
-      const response = await authenticateUser(email, password); // Assume this function exists
+      const response = await loginUser({email, password}); // Assume this function exists
 
       if (response.status === 200) {
         const user = response.data;
+        setUser(user);
         setMessage({ text: response.message, type: 'success' });
         navigate('/home');
       } else {

@@ -1,13 +1,36 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FiHome, FiShoppingCart, FiUser, FiList, FiSearch } from 'react-icons/fi';
+import { FaTimes } from 'react-icons/fa';
 import logo from '../../assets/images/prohome.png';
+import { UserContext } from '../../context/UserContext';
+import { logoutUser } from '../../utils/userApis';
+import { toast } from 'react-toastify';
 
 function Nav() {
     const [isOpen, setIsOpen] = useState(false);
+    const [showProfileMenu, setShowProfileMenu] = useState(false);
     const location = useLocation();
+    const { user,isLoggedIn ,setIsLoggedIn} = useContext(UserContext);
 
-    // Helper function to set the active link style
+    const toggleProfileMenu = () => {
+        setShowProfileMenu(!showProfileMenu);
+    };
+
+    const handleLogout = async() => {
+        // Handle logout logic here
+        const response=await logoutUser(setIsLoggedIn)
+        if (response.data)
+        {
+            setShowProfileMenu(false);
+            toast("Logged out Successfully")
+
+        }else{
+            console.log(response.data)
+        }
+       
+    };
+
     const linkClasses = (path) => (
         location.pathname === path 
             ? 'text-teal-400' 
@@ -27,7 +50,6 @@ function Nav() {
 
                     {/* Desktop Navigation */}
                     <div className="hidden md:flex space-x-8 items-center">
-                        {/* Search Box */}
                         {location.pathname === '/properties' && (
                             <div className="relative text-gray-400 focus-within:text-gray-600">
                                 <input
@@ -40,18 +62,50 @@ function Nav() {
                                 </span>
                             </div>
                         )}
-                        <Link to="/" className={`${linkClasses("/")} text-sm font-medium`}>
+                        <Link to="/" className={`${linkClasses("/")} text-sm font-medium flex items-center`}>
                             <FiHome className="mr-2" /> Home
                         </Link>
-                        <Link to="/properties" className={`${linkClasses("/properties")} text-sm font-medium`}>
+                        <Link to="/properties" className={`${linkClasses("/properties")} text-sm font-medium flex items-center`}>
                             <FiList className="mr-2" /> Properties
                         </Link>
-                        <Link to="/cart" className={`${linkClasses("/cart")} text-sm font-medium`}>
+                        <Link to="/cart" className={`${linkClasses("/cart")} text-sm font-medium flex items-center`}>
                             <FiShoppingCart className="mr-2" /> Cart
                         </Link>
-                        <Link to="/account" className={`${linkClasses("/account")} text-sm font-medium`}>
-                            <FiUser className="mr-2" /> Account
-                        </Link>
+                        <div className="relative">
+                            {isLoggedIn ? (
+                                <div>
+                                    <button onClick={toggleProfileMenu} className="flex items-center text-gray-300 hover:text-teal-400 focus:outline-none">
+                                        <img
+                                            src={user.profilePic || '/default-profile.png'}
+                                            alt="User profile"
+                                            className="w-8 h-8 rounded-full"
+                                        />
+                                        <span className="ml-2">{user.name}</span>
+                                    </button>
+                                    {showProfileMenu && (
+                                        <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg">
+                                            <button onClick={toggleProfileMenu} className="text-right text-gray-800 focus:outline-none p-2">
+                                                <FaTimes className="text-xl" />
+                                            </button>
+                                            <Link to="/profile" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</Link>
+                                            <Link to="/orders" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Orders</Link>
+                                            <Link to="/wishlist" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Wishlist</Link>
+                                            <button
+                                                onClick={handleLogout}
+                                                className="w-full text-left block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                                            >
+                                                Logout
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            ) : (
+                                <Link to="/login" className="flex items-center text-gray-300 hover:text-teal-400 focus:outline-none">
+                                    <FiUser className="mr-2" />
+                                    <span>Login</span>
+                                </Link>
+                            )}
+                        </div>
                     </div>
 
                     {/* Mobile Menu Button */}
