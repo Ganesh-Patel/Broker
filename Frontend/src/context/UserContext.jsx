@@ -13,7 +13,6 @@ export const UserProvider = ({ children }) => {
     const checkLoginStatus = async () => {
       await isUserLoggedIn(setIsLoggedIn,setUser);
       console.log(user);
-      
       setLoading(false);
     };
     checkLoginStatus();

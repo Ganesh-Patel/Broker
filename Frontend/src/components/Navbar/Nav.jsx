@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FiHome, FiShoppingCart, FiUser, FiList, FiSearch, FiLogOut } from 'react-icons/fi';
+import { FiHome, FiUser, FiList, FiSearch, FiLogOut } from 'react-icons/fi';
 import { FaHeart, FaTimes } from 'react-icons/fa';
 import logo from '../../assets/images/prohome.png';
 import { UserContext } from '../../context/UserContext';
@@ -87,7 +87,7 @@ function Nav() {
                                         <span className="ml-2">{user.name}</span>
                                     </button>
                                     {showProfileMenu && (
-                                        <div className="absolute right-0 mt-2 w-48 bg-black border rounded shadow-lg">
+                                        <div onClick={toggleProfileMenu} className="absolute right-0 mt-2 w-48 bg-black border rounded shadow-lg">
                                             <button onClick={toggleProfileMenu} className="text-right text-gray-100 focus:outline-none p-2">
                                                 <FaTimes className="text-xl" />
                                             </button>
@@ -96,6 +96,9 @@ function Nav() {
                                             </Link>
                                             <Link to="/properties" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
                                                 <FiList className="inline mr-2" /> Properties
+                                            </Link>
+                                            <Link to="/create-listing" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
+                                                <FiList className="inline mr-2" /> Create Listing
                                             </Link>
                                             <Link to="/wishlist" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
                                                 <FaHeart className="inline mr-2 text-red-100" /> WishList

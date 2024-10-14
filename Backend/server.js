@@ -5,6 +5,7 @@ import cors from 'cors'
 import {connectToDb} from './Config/connectToDB.js'
 import cookieParser from 'cookie-parser'
 import UserRouter from './Routes/userProfileRoute.js'
+import ListingRouter from './Routes/listingRoute.js'
 
 
 const allowedOrigins = [
@@ -34,16 +35,18 @@ app.use(express.urlencoded({ extended: true }));
 connectToDb();
 
 app.use('/api/user',UserRouter);
+app.use('/api/listing',ListingRouter);
 
 const PORT=process.env.PORT || 3000;
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  if (err.status) {
-      res.status(err.status).json({ message: err.message });
-  } else {
-      res.status(500).json({ message: 'Internal Server Error' });
-  }
+  const statusCode = err.statusCode || 500;
+  const message = err.message || 'Internal Server Error';
+  return res.status(statusCode).json({
+    success: false,
+    statusCode,
+    message,
+  });
 });
