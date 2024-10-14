@@ -16,7 +16,7 @@ function Home() {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-slate-100 min-h-screen">
+    <div className="bg-slate-100 min-h-screen mt-12">
       {/* Carousel Section */}
       {/* <div className="w-full h-[50vh] overflow-hidden">
         <CarouselHome images={images} className="w-full h-full" />

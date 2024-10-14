@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FiHome, FiShoppingCart, FiUser, FiList, FiSearch } from 'react-icons/fi';
+import { FiHome, FiShoppingCart, FiUser, FiList, FiSearch, FiLogOut } from 'react-icons/fi';
 import { FaHeart, FaTimes } from 'react-icons/fa';
 import logo from '../../assets/images/prohome.png';
 import { UserContext } from '../../context/UserContext';
@@ -11,31 +11,35 @@ function Nav() {
     const [isOpen, setIsOpen] = useState(false);
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const location = useLocation();
-    const { user,isLoggedIn ,setIsLoggedIn} = useContext(UserContext);
+    const { user, isLoggedIn, setIsLoggedIn } = useContext(UserContext);
 
     const toggleProfileMenu = () => {
-        setShowProfileMenu(!showProfileMenu);
+        setShowProfileMenu((prev) => !prev);
     };
 
-    const handleLogout = async() => {
-        // Handle logout logic here
-        const response=await logoutUser(setIsLoggedIn)
-        if (response.data)
-        {
+    const handleLogout = async () => {
+        const response = await logoutUser(setIsLoggedIn);
+        if (response.data) {
             setShowProfileMenu(false);
-            toast("Logged out Successfully")
-
-        }else{
-            console.log(response.data)
+            setIsOpen(false);
+            toast("Logged out Successfully");
+        } else {
+            console.log(response.data);
         }
-       
     };
 
-    const linkClasses = (path) => (
-        location.pathname === path 
-            ? 'text-teal-400' 
-            : 'text-gray-300 hover:text-teal-400'
-    );
+    const linkClasses = (path) =>
+        location.pathname === path
+            ? 'text-teal-400'
+            : 'text-gray-300 hover:text-teal-400';
+
+    // Close menus if user logs out
+    useEffect(() => {
+        if (!isLoggedIn) {
+            setShowProfileMenu(false);
+            setIsOpen(false);
+        }
+    }, [isLoggedIn]);
 
     return (
         <nav className="bg-black shadow-lg">
@@ -68,8 +72,8 @@ function Nav() {
                         <Link to="/properties" className={`${linkClasses("/properties")} text-sm font-medium flex items-center`}>
                             <FiList className="mr-2" /> Properties
                         </Link>
-                        <Link to="/wishlist" className={`${linkClasses("/cart")} text-sm font-medium flex items-center`}>
-                        <FaHeart className="inline mr-2 text-red-100" /> WishList
+                        <Link to="/wishlist" className={`${linkClasses("/wishlist")} text-sm font-medium flex items-center`}>
+                            <FaHeart className="inline mr-2 text-red-100 hover:text-teal-400" /> WishList
                         </Link>
                         <div className="relative">
                             {isLoggedIn ? (
@@ -83,19 +87,38 @@ function Nav() {
                                         <span className="ml-2">{user.name}</span>
                                     </button>
                                     {showProfileMenu && (
-                                        <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg">
-                                            <button onClick={toggleProfileMenu} className="text-right text-gray-800 focus:outline-none p-2">
+                                        <div className="absolute right-0 mt-2 w-48 bg-black border rounded shadow-lg">
+                                            <button onClick={toggleProfileMenu} className="text-right text-gray-100 focus:outline-none p-2">
                                                 <FaTimes className="text-xl" />
                                             </button>
-                                            <Link to="/profile" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</Link>
-                                            <Link to="/orders" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Orders</Link>
-                                            <Link to="/wishlist" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Wishlist</Link>
-                                            <button
-                                                onClick={handleLogout}
-                                                className="w-full text-left block px-4 py-2 text-gray-800 hover:bg-gray-100"
-                                            >
-                                                Logout
-                                            </button>
+                                            <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
+                                                <FiHome className="inline mr-2" /> Home
+                                            </Link>
+                                            <Link to="/properties" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
+                                                <FiList className="inline mr-2" /> Properties
+                                            </Link>
+                                            <Link to="/wishlist" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
+                                                <FaHeart className="inline mr-2 text-red-100" /> WishList
+                                            </Link>
+                                            <Link to="/account" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
+                                                <FiUser className="inline mr-2" /> Account
+                                            </Link>
+                                            {isLoggedIn ? (
+                                                <button
+                                                    onClick={handleLogout}
+                                                    className="w-full text-left block px-4 py-2 text-gray-100 hover:text-teal-400"
+                                                >
+                                                    <FiLogOut className="inline mr-2" /> Logout
+                                                </button>
+                                            ) : (
+                                                <Link
+                                                    to="/login"
+                                                    className="w-full text-left block px-4 py-2 text-gray-100 hover:text-teal-400"
+                                                >
+                                                    <FiUser className="inline mr-2" /> Login
+                                                </Link>
+                                            )}
+
                                         </div>
                                     )}
                                 </div>
@@ -111,7 +134,7 @@ function Nav() {
                     {/* Mobile Menu Button */}
                     <div className="flex md:hidden">
                         <button
-                            onClick={() => setIsOpen(!isOpen)}
+                            onClick={() => setIsOpen((prev) => !prev)}
                             type="button"
                             className="bg-gray-800 p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none"
                             aria-controls="mobile-menu"
@@ -148,6 +171,22 @@ function Nav() {
                         <Link to="/account" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
                             <FiUser className="inline mr-2" /> Account
                         </Link>
+                        {isLoggedIn ? (
+                            <button
+                                onClick={handleLogout}
+                                className="w-full text-left block px-4 py-2 text-gray-100 hover:text-teal-400"
+                            >
+                                <FiLogOut className="inline mr-2" /> Logout
+                            </button>
+                        ) : (
+                            <Link
+                                to="/login"
+                                className="w-full text-left block px-4 py-2 text-gray-100 hover:text-teal-400"
+                            >
+                                <FiUser className="inline mr-2" /> Login
+                            </Link>
+                        )}
+
                     </div>
                 </div>
             )}
