@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { verifyemail, sendOtp, validateOtp, changePassword } from '../../utils/userApis.js';
 
 function ForgetPassword() {
     const [email, setEmail] = useState('');
@@ -13,9 +14,110 @@ function ForgetPassword() {
     const [otpTimer, setOtpTimer] = useState(60);
     const navigate = useNavigate();
 
+    const handleFetchAccount = async () => {
+        try {
+            const response = await verifyemail(email);
+            console.log(response);
+            if (response.status === 200) {
+                setAccountFound(true);
+                setErrorMessage('');
+            } else {
+                setErrorMessage('No account found with this email.');
+            }
+        } catch (error) {
+            setErrorMessage('Error fetching account.');
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
+        let timer;
+        if (otpTimer > 0) {
+            timer = setInterval(() => {
+                setOtpTimer(prevTime => prevTime - 1);
+            }, 1000);
+        }
+        return () => clearInterval(timer);
+    }, [otpTimer]);
+
+    const handleSendOtp = async () => {
+        try {
+            const response = await sendOtp(email);
+            console.log(response);
+            if (response.status === 200) {
+                setOtpSent(true);
+                setOtpTimer(60);
+                setErrorMessage('');
+            } else {
+                setErrorMessage('Error sending OTP.');
+            }
+        } catch (error) {
+            setErrorMessage('Failed to send OTP.');
+            console.error(error);
+        }
+    };
+
+    const handleResendOtp = async () => {
+        setOtpTimer(60);
+        try {
+            const response = await sendOtp(email);
+            console.log(response);
+            if (response.status === 200) {
+                setOtpSent(true);
+                setErrorMessage('');
+            } else {
+                setErrorMessage('Error resending OTP.');
+            }
+        } catch (error) {
+            setErrorMessage('Failed to resend OTP.');
+            console.error(error);
+        }
+    };
+
+    const handleValidateOtp = async () => {
+        try {
+            const response = await validateOtp(email, otp);
+            console.log(response);
+            if (response.status === 200) {
+                setIsOtpValid(true);
+                setErrorMessage('');
+            } else {
+                setErrorMessage('Invalid OTP. Please try again.');
+            }
+        } catch (error) {
+            setErrorMessage('Error validating OTP.');
+            console.error(error);
+        }
+    };
+
+    const handleResetPassword = async () => {
+        if (newPassword !== confirmPassword) {
+            setErrorMessage('Passwords do not match.');
+            return;
+        }
+        if (newPassword.length < 6) {
+            setErrorMessage('Password must be at least 6 characters long.');
+            return;
+        }
+
+        try {
+            const response = await changePassword(email, newPassword,confirmPassword);
+            console.log(response);
+            if (response.status === 200) {
+                alert('Password changed successfully!');
+                navigate('/login');
+            } else {
+                setErrorMessage('Failed to change password.');
+            }
+        } catch (error) {
+            setErrorMessage('Error changing password.');
+            console.error(error);
+        }
+    };
+
     return (
         <div className="flex items-center justify-center min-h-screen bg-cover bg-center" style={{ backgroundImage: 'url(https://png.pngtree.com/thumb_back/fh260/background/20190826/pngtree-abstract-metallic-blue-black-frame-layout-modern-tech-design-template-image_305020.jpg)' }}>
-            <div className="w-full max-w-md p-8 bg-transparent bg-opacity-80  backdrop-filter backdrop-blur-lg shadow-lg rounded-lg">
+            <div className="w-full max-w-md p-8 bg-transparent bg-opacity-80 backdrop-filter backdrop-blur-lg shadow-lg rounded-lg">
                 <h2 className="text-2xl font-bold mb-6 text-center text-teal-600">Forgot Password</h2>
 
                 {!accountFound && (
@@ -33,7 +135,7 @@ function ForgetPassword() {
                             />
                         </div>
                         <button
-                          
+                            onClick={handleFetchAccount}
                             className="w-full bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                         >
                             Fetch Account
@@ -44,7 +146,7 @@ function ForgetPassword() {
 
                 {accountFound && !otpSent && (
                     <div className="space-y-4">
-                        <p className="text-center text-gray-700">Account found for {email}. Send OTP to proceed.</p>
+                        <p className="text-center text-gray-200">Account found for {email}. Send OTP to proceed.</p>
                         <button
                             onClick={handleSendOtp}
                             className="w-full bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
@@ -57,7 +159,7 @@ function ForgetPassword() {
                 {otpSent && !isOtpValid && (
                     <div className="space-y-4">
                         <div>
-                            <label htmlFor="otp" className="block text-sm font-medium text-gray-700">Enter OTP</label>
+                            <label htmlFor="otp" className="block text-sm font-medium text-gray-200">Enter OTP</label>
                             <input
                                 type="text"
                                 id="otp"
@@ -95,7 +197,7 @@ function ForgetPassword() {
                 {isOtpValid && (
                     <div className="space-y-4">
                         <div>
-                            <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700">New Password</label>
+                            <label htmlFor="newPassword" className="block text-sm font-medium text-gray-200">New Password</label>
                             <input
                                 type="password"
                                 id="newPassword"
@@ -107,7 +209,7 @@ function ForgetPassword() {
                             />
                         </div>
                         <div>
-                            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
+                            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-200">Confirm Password</label>
                             <input
                                 type="password"
                                 id="confirmPassword"
@@ -119,17 +221,18 @@ function ForgetPassword() {
                             />
                         </div>
                         <button
+                            onClick={handleResetPassword}
                             className="w-full bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                         >
-                            Save New Password
+                            Reset Password
                         </button>
                         {errorMessage && <p className="text-red-500 text-center">{errorMessage}</p>}
                     </div>
                 )}
-                
-                <footer className="mt-6 text-center text-gray-200">
-                    <p>&copy; {new Date().getFullYear()} ProHomes. All rights reserved.</p>
-                </footer>
+
+                <div className="text-center mt-4">
+                    <Link to="/login" className="text-teal-500 hover:text-teal-600">Back to login</Link>
+                </div>
             </div>
         </div>
     );

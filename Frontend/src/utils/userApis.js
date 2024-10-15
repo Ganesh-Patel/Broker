@@ -28,7 +28,9 @@ export const loginUser = async (user) => {
 
 export const updateUser = async (id, updates) => {
   try {
-    const response = await axios.put(`${API_URL}user/updateuser`, updates);
+    const response = await axios.post(`${API_URL}user/updateuser`, updates, {
+      withCredentials: true,
+    });
     console.log(`Task ${id} updated successfully:`, { updates, response: response.data });
     return response.data;
   } catch (error) {
