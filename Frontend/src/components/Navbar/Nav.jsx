@@ -54,7 +54,7 @@ function Nav() {
 
                     {/* Desktop Navigation */}
                     <div className="hidden md:flex space-x-8 items-center">
-                        {location.pathname === '/properties' && (
+                        {location.pathname === '/propertiesss' && (
                             <div className="relative text-gray-400 focus-within:text-gray-600">
                                 <input
                                     type="search"
