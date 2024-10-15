@@ -121,8 +121,8 @@ export default function Properties() {
     const urlParams = new URLSearchParams(location.search);
     urlParams.set('startIndex', startIndex);
     const searchQuery = urlParams.toString();
-    const res = await fetch(`/api/listing/get?${searchQuery}`);
-    const data = await res.json();
+    const res = await fetchAllListings(searchQuery);
+    const data = res.data;
     if (data.length < 9) {
       setShowMore(false);
     }

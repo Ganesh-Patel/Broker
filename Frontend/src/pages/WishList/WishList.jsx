@@ -14,8 +14,9 @@ function WishList() {
     const fetchWishlistProducts = async () => {
       try {
         const response = await getWishlist(user._id);
-        console.log(response)
-        setWishlistProducts(response.data.products);
+        console.log('Wishlist Response:', response);
+        // Correct the key to access the property array
+        setWishlistProducts(response.data.property); // Assuming 'property' is the correct key
       } catch (error) {
         console.error('Error fetching wishlist products:', error);
       } finally {
@@ -28,16 +29,17 @@ function WishList() {
 
   const removeFromWishlist = async (productId) => {
     try {
-      const { data } = await addToWishlist(productId);
-      setUser(data.updatedUser);
+      const { data } = await addToWishlist(productId); // Assuming this correctly updates the user's wishlist
+      setUser(data.updatedUser); // Update user context
       setWishlistProducts(wishlistProducts.filter(product => product._id !== productId));
     } catch (error) {
       console.error('Error removing product from wishlist:', error);
     }
   };
 
-  const addToCart = async (productId) => {
+  const bookNow = async (productId) => {
     // Implement add to cart functionality here
+    console.log('here you are going to book the property ',productId)
   };
 
   if (loading) {
@@ -67,30 +69,30 @@ function WishList() {
             <div key={product._id} className="border rounded-lg shadow-md p-4 flex flex-col lg:flex-row items-center lg:items-start">
               {/* Product Image */}
               <Link to={`/product/${product._id}`} className="w-full lg:w-1/4">
-                <img src={product.images[0]} alt={product.name} className="w-full h-48 object-cover rounded mb-4 lg:mb-0" />
+                <img src={product.imageUrls[0]} alt={product.name} className="w-full h-48 object-cover rounded mb-4 lg:mb-0" />
               </Link>
 
               {/* Product Details */}
               <div className="flex-1 lg:ml-4 text-center lg:text-left">
                 <h2 className="text-xl font-semibold">{product.name}</h2>
                 <p className="text-gray-600 my-2">{product.description}</p>
-                <p className="text-gray-800 font-bold text-lg">${product.price}</p>
+                <p className="text-gray-800 font-bold text-lg">${product.discountPrice}</p> {/* Change to discountPrice if applicable */}
                 <div className="flex items-center justify-center lg:justify-start my-2">
                   <FaStar className="text-yellow-500" />
-                  <span className="ml-1 text-gray-600">{product.rating} / 5</span>
+                  <span className="ml-1 text-gray-600">{product.rating || 0} / 5</span> {/* Fallback for rating */}
                 </div>
-                <p className={`text-sm ${product.inStock ? 'text-green-600' : 'text-red-600'}`}>
-                  {product.inStock ? 'In Stock' : 'Out of Stock'}
+                <p className={`text-sm ${product.furnished ? 'text-green-600' : 'text-red-600'}`}>
+                  {product.furnished ? 'Furnished' : 'Not Furnished'}
                 </p>
               </div>
               {/* Buttons: Add to Cart and Remove from Wishlist */}
               <div className="flex flex-col space-y-2 lg:ml-4 mt-4 lg:mt-0">
                 <button
-                  onClick={() => addToCart(product._id)}
+                  onClick={() => bookNow(product._id)}
                   className="bg-teal-500 mt-8 text-white px-4 py-2 rounded hover:bg-teal-600 flex items-center justify-center"
                 >
                   <FaShoppingCart className="mr-2" />
-                  Add to Cart
+                  Book Now
                 </button>
                 <button
                   onClick={() => removeFromWishlist(product._id)}

@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MdLocationOn } from 'react-icons/md';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { addToWishlist } from '../../utils/listingApis';
+import {UserContext} from '../../context/UserContext'
 
 export default function ListingCard({ listing }) {
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const{user}=useContext(UserContext)
 
   // Toggle wishlist status
   const handleWishlistToggle = async () => {

@@ -29,6 +29,7 @@ export const fetchAllListings = async (searchQuery) => {
     }
 }
 export const addToWishlist = async (propId) => {
+    console.log(propId)
     try {
         const response = await axios.post(`${API_URL}listing/addtowishlist`,{propId},{
             withCredentials: true,
@@ -38,9 +39,10 @@ export const addToWishlist = async (propId) => {
      return error.message;
     }
 }
-export const getWishlist = async (userID) => {
+export const getWishlist = async (userId) => {
+    console.log(userId)
     try {
-        const response = await axios.get(`${API_URL}listing/getwishlist/${userID}`,{withCredentials: true});
+        const response = await axios.get(`${API_URL}listing/getwishlist/${userId}`,{withCredentials: true});
         return response;
     } catch (error) {
      return error.message;
