@@ -11,6 +11,7 @@ import CreateListing from './pages/CreateListing/CreateListing.jsx';
 import Listing from './pages/Listing/Listing.jsx';
 import Properties from './pages/Properties/Properties.jsx';
 import WishList from './pages/WishList/WishList.jsx';
+import AboutUs from './pages/About/AboutUs.jsx';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             <Route path='/listing/:listingId' element={<Listing />} />
             <Route path='/properties' element={<Properties />} />
             <Route path='/wishlist' element={<WishList />} />
+            <Route path='/about' element={<AboutUs/>} />
           </Routes>
         </main>
         <Footer />

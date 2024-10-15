@@ -3,16 +3,17 @@ import { Link } from 'react-router-dom';
 import { MdLocationOn } from 'react-icons/md';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { addToWishlist } from '../../utils/listingApis';
-import {UserContext} from '../../context/UserContext'
+import { UserContext } from '../../context/UserContext';
+import defaultImg from '../../assets/property/prop6.jpeg';
 
 export default function ListingCard({ listing }) {
   const [isWishlisted, setIsWishlisted] = useState(false);
-  const{user}=useContext(UserContext)
+  const { user } = useContext(UserContext);
 
   // Toggle wishlist status
   const handleWishlistToggle = async () => {
     try {
-      await addToWishlist(listing._id); 
+      await addToWishlist(listing._id);
       setIsWishlisted((prev) => !prev);
     } catch (error) {
       console.error('Error adding to wishlist:', error);
@@ -25,8 +26,9 @@ export default function ListingCard({ listing }) {
       <Link to={`/listing/${listing._id}`}>
         <img
           src={
-            listing.imageUrls[0] ||
-            'https://53.fs1.hubspotusercontent-na1.net/hub/53/hubfs/Sales_Blog/real-estate-business-compressor.jpg?width=595&height=400&name=real-estate-business-compressor.jpg'
+            listing.imageUrls.length > 0
+              ? listing.imageUrls[0]
+              : defaultImg // Use the default image if no images are available
           }
           alt='listing cover'
           className='h-[320px] sm:h-[220px] w-full object-cover hover:scale-105 transition-scale duration-300'

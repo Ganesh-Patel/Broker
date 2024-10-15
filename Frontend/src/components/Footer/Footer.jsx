@@ -11,8 +11,9 @@ function Footer() {
           
           {/* Logo and Description */}
           <div className="w-full md:w-1/3 flex flex-col items-center md:items-start text-center md:text-left">
-            <img className="h-52 w-48 m-0" src={logo} alt="ProHomes Logo" />
-            <p className="text-sm leading-relaxed max-w-xs">
+            {/* <img className="h-16 w-48 m-0" src={logo} alt="ProHomes Logo" /> */}
+            <h1 className='text-4xl py-1 font-bold text-teal-400'>ProHomes</h1>
+            <p className="text-sm leading-relaxed max-w-xs mt-0">
               ProHomes is committed to providing exceptional real estate services. Let us help you find your dream home. Reach out for more details.
             </p>
           </div>

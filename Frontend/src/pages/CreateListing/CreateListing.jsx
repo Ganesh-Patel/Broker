@@ -27,7 +27,7 @@ const { user } = useContext(UserContext);
     discountPrice: 0,
     offer: false,
     parking: false,
-    furnished: false,
+    furnished: false
   });
   const [imageUploadError, setImageUploadError] = useState(false);
   const [uploading, setUploading] = useState(false);

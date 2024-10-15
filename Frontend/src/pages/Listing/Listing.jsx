@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css/bundle';
 import { UserContext } from '../../context/UserContext';
+import defaultImg from '../../assets/property/prohomedefault.jpeg';
 import {
   FaBath,
   FaBed,
@@ -34,7 +35,7 @@ export default function Listing() {
     const fetchListing = async () => {
       try {
         setLoading(true);
-        const res = await  fetchList(params.listingId)
+        const res = await fetchList(params.listingId)
         const data = res.data;
         if (data.success === false) {
           setError(true);
@@ -61,17 +62,30 @@ export default function Listing() {
       {listing && !loading && !error && (
         <div>
           <Swiper navigation>
-            {listing.imageUrls.map((url) => (
-              <SwiperSlide key={url}>
+            {listing.imageUrls.length > 0 ? (
+              listing.imageUrls.map((url) => (
+                <SwiperSlide key={url}>
+                  <div
+                    className='h-[550px]'
+                    style={{
+                      background: `url(${url}) center no-repeat `,
+                      backgroundSize: 'cover',
+                    }}
+                  ></div>
+                </SwiperSlide>
+              ))
+            ) : (
+              <SwiperSlide key="default">
                 <div
                   className='h-[550px]'
                   style={{
-                    background: `url(${url}) center no-repeat`,
+                    background: `url(${defaultImg}) center no-repeat`,
                     backgroundSize: 'cover',
                   }}
                 ></div>
               </SwiperSlide>
-            ))}
+            )}
+
           </Swiper>
           <div className='fixed top-[13%] right-[3%] z-10 border rounded-full w-12 h-12 flex justify-center items-center bg-slate-100 cursor-pointer'>
             <FaShare
@@ -138,7 +152,7 @@ export default function Listing() {
                 {listing.furnished ? 'Furnished' : 'Unfurnished'}
               </li>
             </ul>
-            {user&& listing.userRef !== user._id && !contact && (
+            {user && listing.userRef !== user._id && !contact && (
               <button
                 onClick={() => setContact(true)}
                 className='bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3'

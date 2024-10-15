@@ -75,6 +75,9 @@ function Nav() {
                         <Link to="/wishlist" className={`${linkClasses("/wishlist")} text-sm font-medium flex items-center`}>
                             <FaHeart className="inline mr-2 text-red-100 hover:text-teal-400" /> WishList
                         </Link>
+                        <Link to="/about" className={`${linkClasses("/about")} text-sm font-medium flex items-center`}>
+                            <FiUser className="inline mr-2" /> About Us
+                        </Link>
                         <div className="relative">
                             {isLoggedIn ? (
                                 <div>
@@ -87,8 +90,8 @@ function Nav() {
                                         <span className="ml-2">{user.name}</span>
                                     </button>
                                     {showProfileMenu && (
-                                        <div onClick={toggleProfileMenu} className="absolute right-0 mt-2 w-48 bg-black border rounded shadow-lg">
-                                            <button onClick={toggleProfileMenu} className="text-right text-gray-100 focus:outline-none p-2">
+                                        <div onClick={toggleProfileMenu} className="absolute right-0 mt-4 w-48 bg-black border rounded shadow-lg">
+                                            <button className="text-right text-gray-100 focus:outline-none p-2">
                                                 <FaTimes className="text-xl" />
                                             </button>
                                             <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
@@ -102,6 +105,9 @@ function Nav() {
                                             </Link>
                                             <Link to="/wishlist" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
                                                 <FaHeart className="inline mr-2 text-red-100" /> WishList
+                                            </Link>
+                                            <Link to="/about" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
+                                                <FiUser className="inline mr-2" /> About Us
                                             </Link>
                                             <Link to="/account" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
                                                 <FiUser className="inline mr-2" /> Account
@@ -160,7 +166,7 @@ function Nav() {
 
             {/* Mobile Menu */}
             {isOpen && (
-                <div className="md:hidden bg-black" id="mobile-menu">
+                <div  onClick={() => setIsOpen(!isOpen)} className="md:hidden bg-black" id="mobile-menu">
                     <div className="px-2 pt-2 pb-3 space-y-1">
                         <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
                             <FiHome className="inline mr-2" /> Home
@@ -170,6 +176,9 @@ function Nav() {
                         </Link>
                         <Link to="/wishlist" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
                             <FaHeart className="inline mr-2 text-red-100" /> WishList
+                        </Link>
+                        <Link to="/about" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
+                            <FiUser className="inline mr-2" /> About Us
                         </Link>
                         <Link to="/account" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
                             <FiUser className="inline mr-2" /> Account
