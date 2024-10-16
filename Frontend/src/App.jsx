@@ -14,6 +14,7 @@ import Properties from './pages/Properties/Properties.jsx';
 import WishList from './pages/WishList/WishList.jsx';
 import AboutUs from './pages/About/AboutUs.jsx';
 import AccountPage from './pages/UserAccount/AccountPage.jsx';
+import PayRent from './pages/PayRent/PayRent.jsx';
 
 function App() {
   return (
@@ -58,6 +59,10 @@ function App() {
             <Route 
               path="/account" 
               element={<ProtectedRoute><AccountPage /></ProtectedRoute>} 
+            />
+            <Route 
+              path="/payrent" 
+              element={<ProtectedRoute><PayRent /></ProtectedRoute>} 
             />
           </Routes>
         </main>

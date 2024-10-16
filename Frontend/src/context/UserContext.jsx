@@ -11,8 +11,8 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const checkLoginStatus = async () => {
-      await isUserLoggedIn(setIsLoggedIn,setUser);
-      console.log(user);
+      const response=await isUserLoggedIn(setIsLoggedIn,setUser);
+      console.log(response);
       setLoading(false);
     };
     checkLoginStatus();

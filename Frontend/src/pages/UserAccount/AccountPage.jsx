@@ -1,12 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { updateUser, deleteUser } from '../../utils/userApis.js'; // Assume these API functions are available
-import { fetchUserListings } from '../../utils/listingApis.js'; // Assume these API functions are available
+import { fetchUserListings } from '../../utils/listingApis.js'; 
 import { UserContext } from '../../context/UserContext.jsx';
 import defaultImg from '../../assets/property/prop6.jpeg';
+import { Puff } from 'react-loader-spinner';
 
 function AccountPage() {
-    const { user, setUser } = useContext(UserContext);
+    const { user, setUser,isLoggedIn} = useContext(UserContext);
     const [profilePic, setProfilePic] = useState(user.profilePic || 'https://via.placeholder.com/150');
     const [firstname, setFirstname] = useState(user.firstname);
     const [lastname, setLastname] = useState(user.lastname);
@@ -25,8 +26,10 @@ function AccountPage() {
     useEffect(() => {
         const fetchListings = async () => {
             try {
-                const response = await fetchUserListings(user._id);
-                setListings(response.data || []); // Adjust based on the response structure
+                if (user?._id && isLoggedIn) {
+                    const response = await fetchUserListings(user._id);
+                    setListings(response.data || []); // Adjust based on the response structure
+                }
             } catch (error) {
                 console.error('Error fetching listings:', error);
             } finally {
@@ -35,7 +38,7 @@ function AccountPage() {
         };
 
         fetchListings();
-    }, [user._id]);
+    }, [user?._id, isLoggedIn]);
 
     const handleUpdateProfile = async () => {
         try {
@@ -128,8 +131,18 @@ function AccountPage() {
         alert('Listing saved successfully!'); // Replace with actual success message
     };
 
+
+     // Render
+     if (loading) {
+        return (
+            <div className="loader-container mt-18 flex flex-col items-center justify-center">
+                <Puff height="100" width="100" color="#4fa94d" ariaLabel="loading" />
+                <p>Loading your account...</p>
+            </div>
+        );
+    }
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+        <div className="flex mt-12 flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
             {/* User Profile Section */}
             <div className="w-full max-w-3xl p-6 bg-white shadow-lg rounded-lg">
                 <h2 className="text-2xl font-bold mb-6 text-center text-teal-600">Account Details</h2>
