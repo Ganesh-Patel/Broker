@@ -65,6 +65,19 @@ export const getListing = async (req, res, next) => {
     next(error);
   }
 };
+export const getUserListing = async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+    console.log(userId)
+    const listings = await Listing.find({ userRef: userId }); 
+    if (listings.length === 0) {
+      return next(errorHandler(404, 'No listings found for this user!'));
+    }
+    res.status(200).json(listings); 
+  } catch (error) {
+    next(error); 
+  }
+};
 
 export const getListings = async (req, res, next) => {
   try {

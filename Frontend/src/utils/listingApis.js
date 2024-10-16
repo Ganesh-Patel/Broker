@@ -20,6 +20,16 @@ export const fetchListing = async (id) => {
      return error.message;
     }
 }
+export const fetchUserListings = async (userId) => {
+    console.log(userId)
+    try {
+        const response = await axios.get(`${API_URL}listing/get-user-listing/${userId}`,{withCredentials: true});
+        console.log(response)
+        return response;
+    } catch (error) {
+     return error.message;
+    }
+}
 export const fetchAllListings = async (searchQuery) => {
     try {
         const response = await axios.get(`${API_URL}listing/get?${searchQuery}`,{withCredentials: true});
