@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import ProtectedRoute from './routes/ProtectedRoute.jsx';
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
 import Home from './pages/Home/Home';
@@ -23,17 +24,41 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
-            <Route path='*' element={<Home />} />
+            <Route path="*" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path='/forgotpassword' element={<ForgetPassword />} />
-            <Route path='/verifyemail' element={<VerifyEmail />} />
-            <Route path='/create-listing' element={<CreateListing />} />
-            <Route path='/listing/:listingId' element={<Listing />} />
-            <Route path='/properties' element={<Properties />} />
-            <Route path='/wishlist' element={<WishList />} />
-            <Route path='/about' element={<AboutUs/>} />
-            <Route path='/account' element={<AccountPage/>} />
+            <Route path="/forgotpassword" element={<ForgetPassword />} />
+            <Route path="/verifyemail" element={<VerifyEmail />} />
+            <Route 
+              path="/properties" 
+              element={<Properties />} 
+            />
+
+            {/* Protected Routes */}
+            <Route 
+              path="/create-listing" 
+              element={<ProtectedRoute><CreateListing /></ProtectedRoute>} 
+            />
+            <Route 
+              path="/listing/:listingId" 
+              element={<ProtectedRoute><Listing /></ProtectedRoute>} 
+            />
+            <Route 
+              path="/properties" 
+              element={<ProtectedRoute><Properties /></ProtectedRoute>} 
+            />
+            <Route 
+              path="/wishlist" 
+              element={<ProtectedRoute><WishList /></ProtectedRoute>} 
+            />
+            <Route 
+              path="/about" 
+              element={<AboutUs />} 
+            />
+            <Route 
+              path="/account" 
+              element={<ProtectedRoute><AccountPage /></ProtectedRoute>} 
+            />
           </Routes>
         </main>
         <Footer />
