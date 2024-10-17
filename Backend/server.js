@@ -11,6 +11,7 @@ import paymentRouter from './Routes/paymentRoute.js'
 
 const allowedOrigins = [
     'http://localhost:5173', 
+    'https://broker-alpha.vercel.app/',
     '*' 
   ];
   
