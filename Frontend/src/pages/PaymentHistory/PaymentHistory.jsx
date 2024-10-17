@@ -7,7 +7,7 @@ const PaymentHistory = () => {
     const [payments, setPayments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const[user]=useContext(UserContext);
+    const {user}=useContext(UserContext);
     const[userId,setUserId]=useState(user._id);
 
     useEffect(() => {
@@ -18,7 +18,7 @@ const PaymentHistory = () => {
             }
 
             try {
-                const data = await getPayment(userId);
+                const data = await getPayment(user._id);
                 setPayments(data); // Assuming the API returns an array of payment objects
             } catch (err) {
                 setError('Failed to fetch payment history');
