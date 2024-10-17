@@ -1,8 +1,7 @@
-// ContactModal.js
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import { MoonLoader } from 'react-spinners';
+import emailjs from 'emailjs-com';
 import './modalStyles.css'; 
 
 const ContactModal = ({ listing, onClose }) => {
@@ -40,24 +39,46 @@ const ContactModal = ({ listing, onClose }) => {
     }
 
     try {
-      // Replace with your API endpoint
-      const response = await axios.post('https://your-api-endpoint.com/send-email', {
-        name,
-        email,
+      // Sending email to landlord
+      const landlordTemplateParams = {
+        to_name: 'Landlord', // Replace with landlord's name or dynamic data if available
+        to_email: listing.userRef.email,
+        from_name: name,
+        from_email: email,
         contactNumber,
         message,
         listingId: listing._id,
-      });
+      };
 
-      if (response.status === 200) {
-        setFormStatus('Thank you for your message! The landlord will contact you soon.');
-        setName('');
-        setEmail('');
-        setContactNumber('');
-        setMessage('');
-      } else {
-        setFormStatus('Failed to send message. Please try again later.');
-      }
+      await emailjs.send(
+        'service_3prevah', // Service ID
+        'template_158', // Template ID for the message to the landlord
+        landlordTemplateParams,
+        'K1uJbznyFYj_ot4IV' // Replace with your EmailJS user ID
+      );
+
+      // Sending acknowledgment email to the user
+      const ackTemplateParams = {
+        to_name:name,
+        to_email: email, 
+        from_name: name,
+        listingId: listing._id,
+        message,
+      };
+
+      await emailjs.send(
+        'service_3prevah', // Service ID
+        'template_158158', // Replace with your acknowledgment template ID
+        ackTemplateParams,
+        'K1uJbznyFYj_ot4IV' // Replace with your EmailJS user ID
+      );
+
+      setFormStatus('Thank you for your message! The landlord will contact you soon.');
+      setName('');
+      setEmail('');
+      setContactNumber('');
+      setMessage('');
+      onClose();
     } catch (error) {
       setFormStatus('Failed to send message. Please try again later.');
     } finally {

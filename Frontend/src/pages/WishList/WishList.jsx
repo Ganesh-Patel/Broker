@@ -8,14 +8,19 @@ import defaultImg from '../../assets/property/prohomedefault.jpeg';
 import { createBooking } from '../../utils/bookingApi';
 
 function WishList() {
-  const { user, setUser, isLoggedIn } = useContext(UserContext);
+  const { user, setUser, isLoggedIn,checkLoginStatus  } = useContext(UserContext);
   const [wishlistProducts, setWishlistProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [bookingLoading, setBookingLoading] = useState(false);
   const navigate = useNavigate();
+    // useEffect(() => {
+    //   checkLoginStatus ();
+    // },[])
 
   useEffect(() => {
+
     const fetchWishlistProducts = async () => {
+   
       if (isLoggedIn && user) {
         try {
           const response = await getWishlist(user._id);

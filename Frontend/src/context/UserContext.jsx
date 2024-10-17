@@ -10,21 +10,23 @@ export const UserProvider = ({ children }) => {
   
 
   useEffect(() => {
-    const checkLoginStatus = async () => {
-      const response=await isUserLoggedIn(setIsLoggedIn,setUser);
-      console.log(response);
-      setLoading(false);
-    };
+    console.log('UserContext useEffect called');
     checkLoginStatus();
 
   }, []);
   
+  const checkLoginStatus = async () => {
+    const response=await isUserLoggedIn(setIsLoggedIn,setUser);
+    console.log(response);
+    setLoading(false);
+  };
+
   console.log(isLoggedIn)
   if (loading) {
     return null;
   }
   return (
-    <UserContext.Provider value={{ user, setUser,isLoggedIn,setIsLoggedIn,loading }}>
+    <UserContext.Provider value={{ user, setUser,isLoggedIn,setIsLoggedIn,loading,checkLoginStatus }}>
       {children}
     </UserContext.Provider>
   );

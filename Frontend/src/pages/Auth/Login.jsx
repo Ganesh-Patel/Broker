@@ -22,6 +22,7 @@ function Login() {
       if (response.status === 200) {
         const user = response.data;
         setUser(user);
+        console.log(user,'user from login ')
         setIsLoggedIn(true);
         setMessage({ text: response.message, type: 'success' });
         navigate('/home');
