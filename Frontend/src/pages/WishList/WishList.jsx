@@ -5,11 +5,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaTrashAlt, FaShoppingCart, FaStar } from 'react-icons/fa';
 import { addToWishlist, getWishlist } from '../../utils/listingApis';
 import defaultImg from '../../assets/property/prohomedefault.jpeg';
+import { createBooking } from '../../utils/bookingApi';
 
 function WishList() {
   const { user, setUser, isLoggedIn } = useContext(UserContext);
   const [wishlistProducts, setWishlistProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [bookingLoading, setBookingLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,9 +44,37 @@ function WishList() {
     }
   };
 
-  const bookNow = (productId) => {
-    // Implement add to cart or booking functionality here
-    console.log('Booking property:', productId);
+  const bookNow = async (productId) => {
+    if (!user) return;
+    try {
+      setBookingLoading(true);
+
+      const landlordEmail ='demon158158158@gmail.com'; // Replace with the correct property for landlord's email
+  
+      if (!landlordEmail) {
+        console.error('Landlord email is not available.');
+        return;
+      }
+      const bookingData = {
+        userRef: user._id,
+        listingRef: productId,
+        leaseStartDate: new Date().toISOString().split('T')[0], // Adjust as needed
+        leaseEndDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0], // Adjust as needed
+        totalAmount: 1000, // Replace with dynamic amount or calculate based on listing
+        tenantDetails: { name: user.name, phone: user.phone },
+        landlordEmail
+      };
+
+      const response = await createBooking(bookingData);
+      console.log('Booking created successfully:', response);
+      removeFromWishlist(productId);
+      // Navigate to booking confirmation or details page if needed
+      navigate(`/bookings`);
+    } catch (error) {
+      console.error('Error creating booking:', error);
+    } finally {
+      setBookingLoading(false);
+    }
   };
 
   if (loading) {
@@ -109,9 +139,14 @@ function WishList() {
                 <button
                   onClick={() => bookNow(product._id)}
                   className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600 flex items-center justify-center"
+                  disabled={bookingLoading}
                 >
-                  <FaShoppingCart className="mr-2" />
-                  Book Now
+                  {bookingLoading ? 'Booking...' : (
+                    <>
+                      <FaShoppingCart className="mr-2" />
+                      Book Now
+                    </>
+                  )}
                 </button>
                 <button
                   onClick={() => removeFromWishlist(product._id)}

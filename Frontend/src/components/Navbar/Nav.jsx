@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FiHome, FiUser, FiList, FiSearch, FiLogOut } from 'react-icons/fi';
-import { FaHeart, FaTimes } from 'react-icons/fa';
+import { FiHome, FiUser, FiList, FiSearch, FiLogOut, FiMapPin, FiFileText, FiInfo } from 'react-icons/fi';
+import { FaClipboardList, FaHeart, FaMoneyBillWave, FaTimes } from 'react-icons/fa';
 import logo from '../../assets/images/prohome.png';
 import { UserContext } from '../../context/UserContext';
 import { logoutUser } from '../../utils/userApis';
@@ -70,7 +70,7 @@ function Nav() {
                             <FiHome className="mr-2" /> Home
                         </Link>
                         <Link to="/properties" className={`${linkClasses("/properties")} text-sm font-medium flex items-center`}>
-                            <FiList className="mr-2" /> Properties
+                            <FiMapPin className="mr-2" /> Properties
                         </Link>
                         <Link to="/wishlist" className={`${linkClasses("/wishlist")} text-sm font-medium flex items-center`}>
                             <FaHeart className="inline mr-2 text-red-100 hover:text-teal-400" /> WishList
@@ -98,7 +98,7 @@ function Nav() {
                                                 <FiHome className="inline mr-2" /> Home
                                             </Link>
                                             <Link to="/properties" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
-                                                <FiList className="inline mr-2" /> Properties
+                                                <FiMapPin className="inline mr-2" /> Properties
                                             </Link>
                                             <Link to="/create-listing" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
                                                 <FiList className="inline mr-2" /> Create Listing
@@ -106,8 +106,17 @@ function Nav() {
                                             <Link to="/wishlist" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
                                                 <FaHeart className="inline mr-2 text-red-100" /> WishList
                                             </Link>
+                                            <Link to="/mybookings" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
+                                                <FaClipboardList className="inline mr-2 text-red-100" />My Bookings
+                                            </Link>
+                                            <Link to="/payrent" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
+                                                <FaMoneyBillWave className="inline mr-2" /> Pay Rent
+                                            </Link>
+                                            <Link to="/payment-history" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
+                                                <FiFileText className="inline mr-2" /> Payment History
+                                            </Link>
                                             <Link to="/about" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
-                                                <FiUser className="inline mr-2" /> About Us
+                                                <FiInfo className="inline mr-2" /> About Us
                                             </Link>
                                             <Link to="/account" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
                                                 <FiUser className="inline mr-2" /> Account
@@ -166,19 +175,31 @@ function Nav() {
 
             {/* Mobile Menu */}
             {isOpen && (
-                <div  onClick={() => setIsOpen(!isOpen)} className="md:hidden bg-black" id="mobile-menu">
+                <div onClick={() => setIsOpen(!isOpen)} className="md:hidden bg-black" id="mobile-menu">
                     <div className="px-2 pt-2 pb-3 space-y-1">
                         <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
                             <FiHome className="inline mr-2" /> Home
                         </Link>
                         <Link to="/properties" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
-                            <FiList className="inline mr-2" /> Properties
+                            <FiMapPin className="inline mr-2" /> Properties
+                        </Link>
+                        <Link to="/create-listing" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
+                            <FiList className="inline mr-2" /> Create Listing
                         </Link>
                         <Link to="/wishlist" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
                             <FaHeart className="inline mr-2 text-red-100" /> WishList
                         </Link>
+                        <Link to="/mybookings" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
+                            <FaClipboardList className="inline mr-2 text-red-100" />My Bookings
+                        </Link>
+                        <Link to="/payrent" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
+                            <FaMoneyBillWave className="inline mr-2" /> Pay Rent
+                        </Link>
+                        <Link to="/payment-history" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
+                            <FiFileText className="inline mr-2" /> Payment History
+                        </Link>
                         <Link to="/about" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
-                            <FiUser className="inline mr-2" /> About Us
+                            <FiInfo className="inline mr-2" /> About Us
                         </Link>
                         <Link to="/account" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-teal-400">
                             <FiUser className="inline mr-2" /> Account

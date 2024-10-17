@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './routes/ProtectedRoute.jsx';
 import Footer from './components/Footer/Footer';
@@ -15,8 +15,12 @@ import WishList from './pages/WishList/WishList.jsx';
 import AboutUs from './pages/About/AboutUs.jsx';
 import AccountPage from './pages/UserAccount/AccountPage.jsx';
 import PayRent from './pages/PayRent/PayRent.jsx';
+import PaymentHistory from './pages/PaymentHistory/PaymentHistory.jsx';
+import { UserContext } from './context/UserContext.jsx';
+import MyBookings from './pages/MyBooking/MyBookings.jsx';
 
 function App() {
+  const{user,setIsLoggedIn,setUser,setLoading}=useContext(UserContext);
   return (
     <Router>
       <div className="flex flex-col min-h-screen">
@@ -63,6 +67,14 @@ function App() {
             <Route 
               path="/payrent" 
               element={<ProtectedRoute><PayRent /></ProtectedRoute>} 
+            />
+            <Route 
+              path="/payment-history" 
+              element={<ProtectedRoute><PaymentHistory  /></ProtectedRoute>} 
+            />
+             <Route 
+              path="/mybookings" 
+              element={<ProtectedRoute><MyBookings  /></ProtectedRoute>} 
             />
           </Routes>
         </main>

@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser'
 import UserRouter from './Routes/userProfileRoute.js'
 import ListingRouter from './Routes/listingRoute.js'
 import paymentRouter from './Routes/paymentRoute.js'
+import bookingRouter from './Routes/bookingRoute.js'
 
 
 const allowedOrigins = [
@@ -38,6 +39,7 @@ connectToDb();
 app.use('/api/user',UserRouter);
 app.use('/api/listing',ListingRouter);
 app.use('/api/payment',paymentRouter);
+app.use('/api/bookings',bookingRouter);
 
 const PORT=process.env.PORT || 3000;
 

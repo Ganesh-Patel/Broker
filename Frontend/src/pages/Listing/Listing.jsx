@@ -11,15 +11,12 @@ import {
   FaBath,
   FaBed,
   FaChair,
-  FaMapMarkedAlt,
   FaMapMarkerAlt,
   FaParking,
   FaShare,
 } from 'react-icons/fa';
-import Contact from '../../components/LandlordContact/Contact';
+import ContactModal from '../../pages/Contact/ContactModal.jsx';
 import { fetchListing as fetchList } from '../../utils/listingApis.js';
-
-// https://sabe.io/blog/javascript-format-numbers-commas#:~:text=The%20best%20way%20to%20format,format%20the%20number%20with%20commas.
 
 export default function Listing() {
   SwiperCore.use([Navigation]);
@@ -27,7 +24,7 @@ export default function Listing() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [contact, setContact] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const params = useParams();
   const { user } = useContext(UserContext);
 
@@ -35,7 +32,7 @@ export default function Listing() {
     const fetchListing = async () => {
       try {
         setLoading(true);
-        const res = await fetchList(params.listingId)
+        const res = await fetchList(params.listingId);
         const data = res.data;
         if (data.success === false) {
           setError(true);
@@ -85,7 +82,6 @@ export default function Listing() {
                 ></div>
               </SwiperSlide>
             )}
-
           </Swiper>
           <div className='fixed top-[13%] right-[3%] z-10 border rounded-full w-12 h-12 flex justify-center items-center bg-slate-100 cursor-pointer'>
             <FaShare
@@ -126,43 +122,49 @@ export default function Listing() {
                 </p>
               )}
             </div>
-            <p className='text-slate-800'>
-              <span className='font-semibold text-black'>Description - </span>
-              {listing.description}
-            </p>
-            <ul className='text-green-900 font-semibold text-sm flex flex-wrap items-center gap-4 sm:gap-6'>
-              <li className='flex items-center gap-1 whitespace-nowrap '>
-                <FaBed className='text-lg' />
-                {listing.bedrooms > 1
-                  ? `${listing.bedrooms} beds `
-                  : `${listing.bedrooms} bed `}
-              </li>
-              <li className='flex items-center gap-1 whitespace-nowrap '>
-                <FaBath className='text-lg' />
-                {listing.bathrooms > 1
-                  ? `${listing.bathrooms} baths `
-                  : `${listing.bathrooms} bath `}
-              </li>
-              <li className='flex items-center gap-1 whitespace-nowrap '>
-                <FaParking className='text-lg' />
-                {listing.parking ? 'Parking spot' : 'No Parking'}
-              </li>
-              <li className='flex items-center gap-1 whitespace-nowrap '>
-                <FaChair className='text-lg' />
-                {listing.furnished ? 'Furnished' : 'Unfurnished'}
-              </li>
-            </ul>
-            {user && listing.userRef !== user._id && !contact && (
+            <div className='grid grid-cols-2 gap-2'>
+              <p className='bg-slate-100 w-full p-2 text-center rounded-md border'>
+                {listing.bedrooms} <FaBed className='inline' /> Bedrooms
+              </p>
+              <p className='bg-slate-100 w-full p-2 text-center rounded-md border'>
+                {listing.bathrooms} <FaBath className='inline' /> Bathrooms
+              </p>
+              <p className='bg-slate-100 w-full p-2 text-center rounded-md border'>
+                {listing.parking ? (
+                  <>
+                    {listing.parking} <FaParking className='inline' /> Parking
+                  </>
+                ) : (
+                  'No Parking'
+                )}
+              </p>
+              <p className='bg-slate-100 w-full p-2 text-center rounded-md border'>
+                {listing.furnished ? (
+                  <>
+                    <FaChair className='inline' /> Furnished
+                  </>
+                ) : (
+                  'Not Furnished'
+                )}
+              </p>
+            </div>
+            <div>
+              <h2 className='font-semibold text-lg'>Description</h2>
+              <p className='text-gray-700'>{listing.description}</p>
+            </div>
+            <div className='flex justify-end'>
               <button
-                onClick={() => setContact(true)}
-                className='bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3'
+                className='bg-blue-500 text-white px-4 py-2 rounded-md'
+                onClick={() => setShowModal(true)}
               >
-                Contact landlord
+                Contact Landlord
               </button>
-            )}
-            {contact && <Contact listing={listing} />}
+            </div>
           </div>
         </div>
+      )}
+      {showModal && (
+        <ContactModal listing={listing} onClose={() => setShowModal(false)} />
       )}
     </main>
   );

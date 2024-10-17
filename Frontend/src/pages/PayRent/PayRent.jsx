@@ -32,7 +32,7 @@ function PayRent() {
             alert(`Amount must be between ${minAmount} and ${maxAmount}.`);
             return;
         }
-
+    
         // Basic validation
         if (!landlordName || !address || (!accountNumber && paymentMethod === 'account') || !ifscCode || !bankName || !accountHolderName) {
             if (paymentMethod === 'account') {
@@ -41,17 +41,7 @@ function PayRent() {
                 alert('Please fill in all required fields for UPI payment.');
             }
         }
-         // Prepare payment data for saving
-         const paymentData = {
-            landlordName,
-            address,
-            paymentMethod,
-            amount: numericAmount,
-            processingFee: calculateProcessingFee(numericAmount),
-            paymentId: response.razorpay_payment_id,
-            userId: user._id, // Assuming user context contains the user ID
-        };
-
+    
         // Set up Razorpay options
         const options = {
             key: "rzp_test_FxRK4tM1aleKRe",
@@ -63,8 +53,16 @@ function PayRent() {
             handler: async function (response) {
                 console.log('Payment Response:', response);
                 
-               
-
+                const paymentData = {
+                    landlordName,
+                    address,
+                    paymentMethod,
+                    amount: numericAmount,
+                    processingFee: calculateProcessingFee(numericAmount),
+                    paymentId: response.razorpay_payment_id,
+                    userId: user._id, // Assuming user context contains the user ID
+                };
+    
                 // Call the API to save payment data
                 const apiResponse = await createPayment(paymentData);
                 if (apiResponse.error) {
@@ -89,17 +87,18 @@ function PayRent() {
                 color: '#F7CA01',
             },
         };
-
+    
         // Create a new Razorpay instance and open the payment gateway
         const paymentObject = new window.Razorpay(options);
         paymentObject.open();
-
+    
         // Handle payment failure
         paymentObject.on('payment.failed', function (response) {
             console.error('Payment Failed:', response.error);
             alert('Payment failed. Please try again.');
         });
     };
+    
 
     const handleDownloadReceipt = () => {
         const receiptContent = `

@@ -54,17 +54,33 @@ export const updateListing = async (req, res, next) => {
   }
 };
 
+// export const getListing = async (req, res, next) => {
+//   try {
+//     const listing = await Listing.findById(req.params.id).populate('userRef');
+//     if (!listing) {
+//       return next(errorHandler(404, 'Listing not found!'));
+//     }
+//     res.status(200).json(listing);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
 export const getListing = async (req, res, next) => {
   try {
-    const listing = await Listing.findById(req.params.id);
+
+    const listing = await Listing.findById(req.params.id).populate('userRef','_id email');
+
     if (!listing) {
       return next(errorHandler(404, 'Listing not found!'));
     }
+
     res.status(200).json(listing);
   } catch (error) {
-    next(error);
+    next(error); 
   }
 };
+
 export const getUserListing = async (req, res, next) => {
   try {
     const userId = req.params.userId;

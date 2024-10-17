@@ -9,7 +9,7 @@ ListingRouter.delete('/delete/:id', authMiddleware, deleteListing);
 ListingRouter.post('/update/:id', authMiddleware, updateListing);
 ListingRouter.post('/addtowishlist', authMiddleware,addToWishlist );
 ListingRouter.get('/getwishlist/:userId', authMiddleware, getfromWishlist);
-ListingRouter.get('/get/:id', getListing);
+ListingRouter.get('/get/:id',authMiddleware, getListing);
 ListingRouter.get('/get-user-listing/:userId',authMiddleware, getUserListing);
 ListingRouter.get('/get', getListings);
 
