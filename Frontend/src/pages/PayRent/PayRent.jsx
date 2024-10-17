@@ -41,6 +41,16 @@ function PayRent() {
                 alert('Please fill in all required fields for UPI payment.');
             }
         }
+         // Prepare payment data for saving
+         const paymentData = {
+            landlordName,
+            address,
+            paymentMethod,
+            amount: numericAmount,
+            processingFee: calculateProcessingFee(numericAmount),
+            paymentId: response.razorpay_payment_id,
+            userId: user._id, // Assuming user context contains the user ID
+        };
 
         // Set up Razorpay options
         const options = {
@@ -53,16 +63,7 @@ function PayRent() {
             handler: async function (response) {
                 console.log('Payment Response:', response);
                 
-                // Prepare payment data for saving
-                const paymentData = {
-                    landlordName,
-                    address,
-                    paymentMethod,
-                    amount: numericAmount,
-                    processingFee: calculateProcessingFee(numericAmount),
-                    paymentId: response.razorpay_payment_id,
-                    userId: user._id, // Assuming user context contains the user ID
-                };
+               
 
                 // Call the API to save payment data
                 const apiResponse = await createPayment(paymentData);

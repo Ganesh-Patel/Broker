@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = 'http://localhost:3002/api/';//https://broker-6dgs.onrender.com/api/
+//const API_URL = 'http://localhost:3002/api/';//https://broker-6dgs.onrender.com/api/
+const API_URL='https://broker-6dgs.onrender.com/api/';
 
 export const createListing = async (listing) => {
     try {

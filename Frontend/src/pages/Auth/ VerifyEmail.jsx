@@ -23,7 +23,7 @@ const VerifyEmail = () => {
 
             try {
                 // Replace with your backend verification endpoint
-                const response = await axios.get(`http://localhost:3002/api/user/verifyuser?token=${token}`);
+                const response = await axios.get(`https://broker-6dgs.onrender.com/api/user/verifyuser?token=${token}`);
                 
                 if (response) {
                     setMessage('Email verified successfully! You can now log in.');

@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = 'http://localhost:3002/api/payment/'; // Update to production URL when ready
+//const API_URL = 'http://localhost:3002/api/payment/'; // Update to production URL when ready
+const API_URL='https://broker-6dgs.onrender.com/api/payment/';
 export const createPayment = async (data) => {
     try {
         const response = await axios.post(`${API_URL}create-payment`, data, {
