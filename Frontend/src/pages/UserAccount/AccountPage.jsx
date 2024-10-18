@@ -1,13 +1,14 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { updateUser, deleteUser } from '../../utils/userApis.js'; // Assume these API functions are available
-import { fetchUserListings } from '../../utils/listingApis.js'; 
+import { fetchUserListings, deleteListing } from '../../utils/listingApis.js';
 import { UserContext } from '../../context/UserContext.jsx';
 import defaultImg from '../../assets/property/prop6.jpeg';
 import { Puff } from 'react-loader-spinner';
+import EditListingModal from '../EditListingModal/EditListingModal.jsx';
 
 function AccountPage() {
-    const { user, setUser,isLoggedIn} = useContext(UserContext);
+    const { user, setUser, isLoggedIn } = useContext(UserContext);
     const [profilePic, setProfilePic] = useState(user.profilePic || 'https://via.placeholder.com/150');
     const [firstname, setFirstname] = useState(user.firstname);
     const [lastname, setLastname] = useState(user.lastname);
@@ -20,6 +21,7 @@ function AccountPage() {
     const [listings, setListings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedListing, setSelectedListing] = useState(null); // For editing
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
 
     // Fetch user listings on component mount
@@ -109,19 +111,20 @@ function AccountPage() {
     // CRUD Operations for Listings
     const handleDeleteListing = async (listingId) => {
         if (window.confirm('Are you sure you want to delete this listing?')) {
-            // try {
-            //     await deleteUserListing(listingId);
-            //     setListings((prevListings) => prevListings.filter((listing) => listing._id !== listingId));
-            //     alert('Listing deleted successfully.');
-            // } catch (error) {
-            //     console.error('Error deleting listing:', error);
-            //     alert('Failed to delete listing.');
-            // }
+            try {
+                await deleteListing(listingId);
+                setListings((prevListings) => prevListings.filter((listing) => listing._id !== listingId));
+                alert('Listing deleted successfully.');
+            } catch (error) {
+                console.error('Error deleting listing:', error);
+                alert('Failed to delete listing.');
+            }
         }
     };
 
     const handleEditListing = (listing) => {
         setSelectedListing(listing);
+        setIsModalOpen(true);
     };
 
     const handleSaveListing = async () => {
@@ -132,8 +135,8 @@ function AccountPage() {
     };
 
 
-     // Render
-     if (loading) {
+    // Render
+    if (loading) {
         return (
             <div className="loader-container mt-18 flex flex-col items-center justify-center">
                 <Puff height="100" width="100" color="#4fa94d" ariaLabel="loading" />
@@ -247,60 +250,47 @@ function AccountPage() {
 
             {/* Listings Section */}
             <div className="w-full max-w-3xl mt-8 p-6 bg-white shadow-lg rounded-lg">
-  <h2 className="text-2xl font-bold mb-4 text-teal-600">My Listings</h2>
+                <h2 className="text-2xl font-bold mb-4 text-teal-600">My Listings</h2>
 
-  {loading ? (
-    <p className="text-center text-gray-500">Loading listings...</p>
-  ) : listings.length > 0 ? (
-    <div className="space-y-6">
-      {listings.map((listing) => (
-        <div key={listing._id} className="border rounded-lg shadow-md p-4 flex flex-col lg:flex-row items-center lg:items-start">
-          <Link to={`/listing/${listing._id}`}>
-            <img
-              src={listing.imageUrls.length > 0 ? listing.imageUrls[0] : defaultImg}
-              alt="listing cover"
-              className="h-[320px] sm:h-[220px] w-full object-cover hover:scale-105 transition-scale duration-300"
-            />
-          </Link>
-          <div className="flex-1 lg:ml-4 text-center lg:text-left">
-            <h3 className="text-lg font-semibold text-teal-600">{listing.name}</h3>
-            <p className="text-gray-700">{listing.description}</p>
-            <p><strong>Type:</strong> {listing.type}</p>
-            <p><strong>Price:</strong> ${listing.discountPrice || listing.regularPrice}</p>
-            <div className="flex mt-2">
-              <button onClick={() => handleEditListing(listing)} className="mr-2 text-teal-500 hover:underline">Edit</button>
-              <button onClick={() => handleDeleteListing(listing._id)} className="text-red-500 hover:underline">Delete</button>
-              <button onClick={() => handleMarkAsSold(listing._id)} className="ml-2 text-yellow-500 hover:underline">Mark as Sold</button>
+                {loading ? (
+                    <p className="text-center text-gray-500">Loading listings...</p>
+                ) : listings.length > 0 ? (
+                    <div className="space-y-6">
+                        {listings.map((listing) => (
+                            <div key={listing._id} className="border rounded-lg shadow-md p-4 flex flex-col lg:flex-row items-center lg:items-start">
+                                <Link to={`/listing/${listing._id}`}>
+                                    <img
+                                        src={listing.imageUrls.length > 0 ? listing.imageUrls[0] : defaultImg}
+                                        alt="listing cover"
+                                        className='h-[320px] sm:h-[220px] w-72 max-w-72 object-cover hover:scale-105 transition-transform duration-300'
+
+                                    />
+                                </Link>
+                                <div className="flex-1 lg:ml-4 text-center lg:text-left">
+                                    <h3 className="text-lg font-semibold text-teal-600">{listing.name}</h3>
+                                    <p className="text-gray-700">{listing.description}</p>
+                                    <p><strong>Type:</strong> {listing.type}</p>
+                                    <p><strong>Price:</strong> ${listing.discountPrice || listing.regularPrice}</p>
+                                    <div className="flex mt-2">
+                                        <button onClick={() => handleEditListing(listing)} className="mr-2 text-teal-500 hover:underline">Edit</button>
+                                        <button onClick={() => handleDeleteListing(listing._id)} className="text-red-500 hover:underline">Delete</button>
+                                        {/* <button onClick={() => handleMarkAsSold(listing._id)} className="ml-2 text-yellow-500 hover:underline">Mark as Sold</button> */}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <p className="text-center text-gray-500">No listings found.</p>
+                )}
+
             </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  ) : (
-    <p className="text-center text-gray-500">No listings found.</p>
-  )}
 
-  {/* Editing Listing Section */}
-  {selectedListing && (
-    <div className="mt-6 border-t pt-4">
-      <h3 className="text-xl font-semibold text-teal-600">Edit Listing</h3>
-      <input
-        type="text"
-        value={selectedListing.name}
-        onChange={(e) => setSelectedListing({ ...selectedListing, name: e.target.value })}
-        className="block w-full mt-2 px-3 py-2 border border-gray-300 rounded-md"
-        placeholder="Listing Name"
-      />
-      <textarea
-        value={selectedListing.description}
-        onChange={(e) => setSelectedListing({ ...selectedListing, description: e.target.value })}
-        className="block w-full mt-2 px-3 py-2 border border-gray-300 rounded-md"
-        placeholder="Description"
-      ></textarea>
-      <button onClick={handleSaveListing} className="mt-2 bg-teal-500 text-white py-2 px-4 rounded-md">Save Listing</button>
-    </div>
-  )}
-</div>
+            <EditListingModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                listingData={selectedListing}
+            />
 
 
         </div>

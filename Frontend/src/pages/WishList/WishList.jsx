@@ -125,7 +125,7 @@ function WishList() {
                 <img
                   src={product.imageUrls.length > 0 ? product.imageUrls[0] : defaultImg}
                   alt="listing cover"
-                  className="h-[320px] sm:h-[220px] w-full object-cover hover:scale-105 transition-scale duration-300"
+                  className='h-[320px] sm:h-[220px] w-72 max-w-72 object-cover hover:scale-105 transition-transform duration-300'
                 />
               </Link>
               <div className="flex-1 lg:ml-4 text-center lg:text-left">

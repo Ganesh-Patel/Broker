@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const API_URL = 'http://localhost:3002/api/';//https://broker-6dgs.onrender.com/api/
-//const API_URL='https://broker-6dgs.onrender.com/api/';
+//const API_URL = 'http://localhost:3002/api/';//https://broker-6dgs.onrender.com/api/
+const API_URL='https://broker-6dgs.onrender.com/api/';
 
 export const createListing = async (listing) => {
     try {
@@ -12,6 +12,26 @@ export const createListing = async (listing) => {
     } catch (error) {
      return error.message;
     }
+}
+export const updatListing = async (listing,listingId) => {
+    try {
+        const response = await axios.post(`${API_URL}listing/update/${listingId}`,listing,{
+            withCredentials: true,
+        });
+        return response;
+    } catch (error) {
+     return error.message;
+    }
+}
+export const deleteListing=async (id)=>{
+    try {
+        const response = await axios.delete(`${API_URL}listing/delete/${id}`,{      
+            withCredentials: true,
+            });
+            return response;
+            } catch (error) {
+                return error.message;
+                }
 }
 export const fetchListing = async (id) => {
     try {
