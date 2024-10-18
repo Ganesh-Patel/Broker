@@ -1,6 +1,7 @@
 
 import React, { createContext, useEffect, useState } from 'react';
 import {isUserLoggedIn} from '../utils/userApis.js'
+import { Puff } from 'react-loader-spinner';
 
 export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
@@ -23,7 +24,19 @@ export const UserProvider = ({ children }) => {
 
   console.log(isLoggedIn)
   if (loading) {
-    return null;
+    return (
+      <div className="flex justify-center items-center h-screen">
+      <Puff
+        height={80}
+        width={80}
+        radius={1}
+        color="#38b2ac"
+        ariaLabel="loading"
+        visible={true}
+      />
+      <h1>Loading....</h1>
+    </div>
+    );
   }
   return (
     <UserContext.Provider value={{ user, setUser,isLoggedIn,setIsLoggedIn,loading,checkLoginStatus }}>

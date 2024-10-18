@@ -136,7 +136,7 @@ export const fetchUsers = async (searchTerm = '') => {
     );
 
     if (response) {
-      return response ; // Return the data directly
+      return response ; 
     }
   } catch (err) {
     console.log("Error in fetching users: " + err.message);

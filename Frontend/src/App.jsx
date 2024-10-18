@@ -18,65 +18,73 @@ import PayRent from './pages/PayRent/PayRent.jsx';
 import PaymentHistory from './pages/PaymentHistory/PaymentHistory.jsx';
 import { UserContext } from './context/UserContext.jsx';
 import MyBookings from './pages/MyBooking/MyBookings.jsx';
-
+import { Puff } from 'react-loader-spinner';
 function App() {
-  const{user,setIsLoggedIn,setUser,setLoading}=useContext(UserContext);
+  const { loading } = useContext(UserContext);
+
   return (
     <Router>
       <div className="flex flex-col min-h-screen">
         <Header />
         <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="*" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/forgotpassword" element={<ForgetPassword />} />
-            <Route path="/verifyemail" element={<VerifyEmail />} />
-            <Route 
-              path="/properties" 
-              element={<Properties />} 
+          {loading ? (
+            <div className="flex justify-center items-center h-screen">
+            <Puff
+              height={80}
+              width={80}
+              radius={1}
+              color="#38b2ac"
+              ariaLabel="loading"
+              visible={true}
             />
+            <h1>Loading....</h1>
+          </div>
+          ) : (
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="*" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/forgotpassword" element={<ForgetPassword />} />
+              <Route path="/verifyemail" element={<VerifyEmail />} />
+              <Route path="/properties" element={<Properties />} />
 
-            {/* Protected Routes */}
-            <Route 
-              path="/create-listing" 
-              element={<ProtectedRoute><CreateListing /></ProtectedRoute>} 
-            />
-            <Route 
-              path="/listing/:listingId" 
-              element={<ProtectedRoute><Listing /></ProtectedRoute>} 
-            />
-            <Route 
-              path="/properties" 
-              element={<ProtectedRoute><Properties /></ProtectedRoute>} 
-            />
-            <Route 
-              path="/wishlist" 
-              element={<ProtectedRoute><WishList /></ProtectedRoute>} 
-            />
-            <Route 
-              path="/about" 
-              element={<AboutUs />} 
-            />
-            <Route 
-              path="/account" 
-              element={<ProtectedRoute><AccountPage /></ProtectedRoute>} 
-            />
-            <Route 
-              path="/payrent" 
-              element={<ProtectedRoute><PayRent /></ProtectedRoute>} 
-            />
-            <Route 
-              path="/payment-history" 
-              element={<ProtectedRoute><PaymentHistory  /></ProtectedRoute>} 
-            />
-             <Route 
-              path="/mybookings" 
-              element={<ProtectedRoute><MyBookings  /></ProtectedRoute>} 
-            />
-          </Routes>
+              {/* Protected Routes */}
+              <Route 
+                path="/create-listing" 
+                element={<ProtectedRoute><CreateListing /></ProtectedRoute>} 
+              />
+              <Route 
+                path="/listing/:listingId" 
+                element={<ProtectedRoute><Listing /></ProtectedRoute>} 
+              />
+              <Route 
+                path="/wishlist" 
+                element={<ProtectedRoute><WishList /></ProtectedRoute>} 
+              />
+              <Route 
+                path="/about" 
+                element={<AboutUs />} 
+              />
+              <Route 
+                path="/account" 
+                element={<ProtectedRoute><AccountPage /></ProtectedRoute>} 
+              />
+              <Route 
+                path="/payrent" 
+                element={<ProtectedRoute><PayRent /></ProtectedRoute>} 
+              />
+              <Route 
+                path="/payment-history" 
+                element={<ProtectedRoute><PaymentHistory  /></ProtectedRoute>} 
+              />
+              <Route 
+                path="/mybookings" 
+                element={<ProtectedRoute><MyBookings  /></ProtectedRoute>} 
+              />
+            </Routes>
+          )}
         </main>
         <Footer />
       </div>
