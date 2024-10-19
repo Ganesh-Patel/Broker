@@ -35,7 +35,7 @@ export const registerUser = async (req, res) => {
         email,
         password,
         role,
-        isVerified: false,
+        isVerified: true,
       });
     const jwtToken = generateToken(user);
       const verificationLink = `https://broker-alpha.vercel.app/verifyemail?token=${jwtToken}`;
