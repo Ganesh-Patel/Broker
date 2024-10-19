@@ -14,7 +14,8 @@ const allowedOrigins = [
     'http://localhost:5173', 
     'http://localhost:3000',
     'https://broker-alpha.vercel.app',
-    'https://task-management-n5xp8ah04-ganesh-patels-projects.vercel.app'
+    'https://task-management-n5xp8ah04-ganesh-patels-projects.vercel.app',
+    'https://task-management-ecru-chi.vercel.app'
   ];
   
   const corsOptions = {
